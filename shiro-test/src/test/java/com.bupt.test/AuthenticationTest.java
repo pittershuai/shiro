@@ -14,7 +14,8 @@ public class AuthenticationTest {
 
     @Before
     public void addUser(){
-        simpleAccountRealm.addAccount("tom","123");
+        simpleAccountRealm.addAccount("tom","123","admin");
+        simpleAccountRealm.addAccount("tony","123","admin","user");
     }
 
     @Test
@@ -30,7 +31,16 @@ public class AuthenticationTest {
         UsernamePasswordToken token = new UsernamePasswordToken("tom", "123");
         subject.login(token);
         System.out.println("isAuthenticated:"+ subject.isAuthenticated());
+
+        subject.checkRole("admin");//角色验证
+//        subject.checkRole("admin1"); //会报错Subject does not have role [admin1]
+
         subject.logout();
         System.out.println("isAuthenticated:"+ subject.isAuthenticated());
+
+        //--------------------------
+        UsernamePasswordToken tony = new UsernamePasswordToken("tony", "123");
+        subject.login(tony);
+        subject.checkRoles("admin","user"); //多个角色验证
     }
 }
