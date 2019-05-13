@@ -25,6 +25,16 @@ public class JDBCReamlTest {
         jdbcRealm.setDataSource(druidDataSource);
         jdbcRealm.setPermissionsLookupEnabled(true);//权限开关，默认情况下是关闭的，这样就不去查roles_permissions数据库了。
 
+        //认证sql
+        String sql = "select password from test_user where username = ?";
+        jdbcRealm.setAuthenticationQuery(sql);
+
+        //角色sql
+        String roleSql = "select role_name from test_user_role where user_name = ?";
+        jdbcRealm.setUserRolesQuery(roleSql);
+
+        //权限也是一样的，不再演示
+
         //    1、构建SecurityManager环境
         DefaultSecurityManager defaultSecurityManager = new DefaultSecurityManager();
         defaultSecurityManager.setRealm(jdbcRealm);
@@ -33,11 +43,11 @@ public class JDBCReamlTest {
         SecurityUtils.setSecurityManager(defaultSecurityManager);
         Subject subject = SecurityUtils.getSubject(); //获得主体
 
-        UsernamePasswordToken token = new UsernamePasswordToken("tom", "1234");
+        UsernamePasswordToken token = new UsernamePasswordToken("jone", "111");
         subject.login(token);
         System.out.println("isAuthenticated:"+ subject.isAuthenticated());
-        subject.checkRoles("admin");  //角色验证
-        subject.checkPermission("user:select"); //权限验证
+        subject.checkRoles("user");  //角色验证
+//        subject.checkPermission("user:select"); //权限验证
 
         subject.logout();
         System.out.println("isAuthenticated:"+ subject.isAuthenticated());
