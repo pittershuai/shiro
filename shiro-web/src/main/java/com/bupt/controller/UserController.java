@@ -33,26 +33,35 @@ public class UserController {
         return "是admin角色";
     }
 
-    //只有admin角色才能访问，这里应该用到Bean作用域为session的概念。
-    @RequiresRoles("admin")
     @RequestMapping(value = "/testRole.do",method = RequestMethod.GET)
     @ResponseBody
     public String testRole(){
         return "testRole success";
     }
 
-    @RequiresRoles("admin1")
     @RequestMapping(value = "/testRole1.do",method = RequestMethod.GET)
     @ResponseBody
     public String testRole1(){
         return "testRole1 success";
     }
 
-    //由于没有编写从数据库读取权限数据的代码，所以此处不再演示。（实现与角色完全相同）
-    @RequiresPermissions("xx")
-    @RequestMapping(value = "/testPermission.do",method = RequestMethod.GET)
+    @RequestMapping(value = "/testRole2.do",method = RequestMethod.GET)
     @ResponseBody
-    public String testPermission(){
-        return "testPermission success";
+    public String testRole2(){
+        return "testRole2 success";
     }
+
+    @RequestMapping(value = "/testPerms.do",method = RequestMethod.GET)
+    @ResponseBody
+    public String testPerms(){
+        return "testPerms success";
+    }
+
+    @RequestMapping(value = "/testPerms1.do",method = RequestMethod.GET)
+    @ResponseBody
+    public String testPerms1(){
+        return "testPerms1 success";
+    }
+
+
 }

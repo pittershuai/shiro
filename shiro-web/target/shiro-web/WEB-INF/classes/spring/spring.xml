@@ -2,7 +2,8 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     <import resource="springmvc.xml"/>
     <import resource="spring-dao.xml"/>
@@ -20,11 +21,24 @@
                 <!--不需要认证就能访问的路径-->
                 /login.jsp = anon
                 /subLogin.do = anon
+                /testRole.do = roles["admin"]
+                /testRole1.do = roles["admin","admin1"]    <!--需要同时具备这两个角色-->
+                /testRole2.do = roleOr["admin","admin1"]    <!--只需要具备其中一个角色即可-->
+                /testPerms.do = perms["user:delete"]
+                /testPerms1.do = perms["user:delete","user:update"]
                 <!--需要认证才能访问的路径-->
                 /* = authc
             </value>
         </property>
+        <property name="filters">
+            <util:map>
+                <entry key="roleOr" value-ref="rolesOrFilter"/>
+            </util:map>
+        </property>
     </bean>
+
+    <!--自定义的filter-->
+    <bean class="com.bupt.filter.RolesOrFilter" id="rolesOrFilter"/>
 
     <!--创建SecurityManager对象-->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
