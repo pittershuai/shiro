@@ -4,6 +4,8 @@ import com.bupt.vo.User;
 import jdk.nashorn.internal.ir.RuntimeNode;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,8 +28,31 @@ public class UserController {
             return e.getMessage();
         }
         if (subject.hasRole("admin")){
-            return "有admin权限";
+            return "是admin角色";
         }
-        return "无admin权限";
+        return "是admin角色";
+    }
+
+    //只有admin角色才能访问，这里应该用到Bean作用域为session的概念。
+    @RequiresRoles("admin")
+    @RequestMapping(value = "/testRole.do",method = RequestMethod.GET)
+    @ResponseBody
+    public String testRole(){
+        return "testRole success";
+    }
+
+    @RequiresRoles("admin1")
+    @RequestMapping(value = "/testRole1.do",method = RequestMethod.GET)
+    @ResponseBody
+    public String testRole1(){
+        return "testRole1 success";
+    }
+
+    //由于没有编写从数据库读取权限数据的代码，所以此处不再演示。（实现与角色完全相同）
+    @RequiresPermissions("xx")
+    @RequestMapping(value = "/testPermission.do",method = RequestMethod.GET)
+    @ResponseBody
+    public String testPermission(){
+        return "testPermission success";
     }
 }
