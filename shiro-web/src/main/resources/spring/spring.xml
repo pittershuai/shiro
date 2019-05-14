@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <import resource="springmvc.xml"/>
+
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <!--登录url-->
+        <property name="loginUrl" value="login.jsp"/>
+        <!--未认证的跳转页面-->
+        <property name="unauthorizedUrl" value="403.html"/>
+        <!--过滤器链,被拦截的请求是有顺序的-->
+        <property name="filterChainDefinitions">
+            <value>
+                <!--不需要认证就能访问的路径-->
+                /login.jsp = anon
+                /subLogin.do = anon
+                <!--需要认证才能访问的路径-->
+                /* = authc
+            </value>
+        </property>
+    </bean>
+
+    <!--创建SecurityManager对象-->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="realm"/>
+    </bean>
+
+    <bean id="realm" class="com.bupt.shiro.CustomRealm">
+        <property name="credentialsMatcher" ref="HashedCredentialsMatcher"/>
+    </bean>
+
+    <!--创建加密算法-->
+    <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher" id="HashedCredentialsMatcher">
+        <property name="hashAlgorithmName" value="md5"/>
+        <property name="hashIterations" value="1"/>
+    </bean>
+
+</beans>
