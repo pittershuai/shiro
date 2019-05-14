@@ -17,7 +17,6 @@ public class UserController {
     @RequestMapping(value = "/subLogin",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     @ResponseBody
     public String subLogin(User user){
-        System.out.println("1111111111");
         //获得主体
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword());
@@ -26,6 +25,9 @@ public class UserController {
         }catch (Exception e){
             return e.getMessage();
         }
-        return "登录成功";
+        if (subject.hasRole("admin")){
+            return "有admin权限";
+        }
+        return "无admin权限";
     }
 }
