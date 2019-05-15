@@ -36,6 +36,7 @@ public class UserController {
     @RequestMapping(value = "/testRole.do",method = RequestMethod.GET)
     @ResponseBody
     public String testRole(){
+        System.out.println("testRole success");
         return "testRole success";
     }
 

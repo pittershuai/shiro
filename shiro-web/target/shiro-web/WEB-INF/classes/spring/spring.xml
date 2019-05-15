@@ -7,6 +7,8 @@
 
     <import resource="springmvc.xml"/>
     <import resource="spring-dao.xml"/>
+    <import resource="spring-redis.xml"/>
+
     <context:component-scan base-package="com.bupt"/>
 
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
@@ -43,6 +45,7 @@
     <!--创建SecurityManager对象-->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="realm" ref="realm"/>
+        <property name="sessionManager" ref="sessionManager"/>
     </bean>
 
     <bean id="realm" class="com.bupt.shiro.CustomRealm">
@@ -54,5 +57,12 @@
         <property name="hashAlgorithmName" value="md5"/>
         <property name="hashIterations" value="1"/>
     </bean>
+
+    <!-- 自定义的sessionManager -->
+    <bean id="sessionManager" class="org.apache.shiro.session.mgt.DefaultSessionManager">
+        <property name="sessionDAO" ref="redisSessionDao"></property>
+    </bean>
+
+    <bean id="redisSessionDao" class="com.bupt.session.RedisSessionDao"/>
 
 </beans>
