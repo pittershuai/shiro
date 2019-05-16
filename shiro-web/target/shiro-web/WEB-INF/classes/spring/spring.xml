@@ -46,6 +46,7 @@
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="realm" ref="realm"/>
         <property name="sessionManager" ref="sessionManager"/>
+        <property name="cacheManager" ref="cacheManager"/>
     </bean>
 
     <bean id="realm" class="com.bupt.shiro.CustomRealm">
@@ -65,4 +66,5 @@
 
     <bean id="redisSessionDao" class="com.bupt.session.RedisSessionDao"/>
 
+    <bean id="cacheManager" class="com.bupt.cache.RedisCacheManager"/>
 </beans>
