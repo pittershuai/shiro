@@ -59,7 +59,7 @@
     </bean>
 
     <!-- 自定义的sessionManager -->
-    <bean id="sessionManager" class="org.apache.shiro.session.mgt.DefaultSessionManager">
+    <bean id="sessionManager" class="com.bupt.session.CustomSessionManager">
         <property name="sessionDAO" ref="redisSessionDao"></property>
     </bean>
 

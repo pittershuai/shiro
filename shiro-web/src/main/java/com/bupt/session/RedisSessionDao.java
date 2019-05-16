@@ -31,7 +31,7 @@ public class RedisSessionDao extends AbstractSessionDAO {
             byte[] key = getKey(session.getId().toString());
             byte[] value = SerializationUtils.serialize(session);  //将session序列化后放在byte数组，作为redis存储的值。
             jedisUtil.set(key,value);
-            jedisUtil.expire(key,1000);
+            jedisUtil.expire(key,100000);
         }
     }
 
